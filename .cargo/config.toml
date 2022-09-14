@@ -1,0 +1,16 @@
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=-s"]
+
+[profile.wasm-release]
+inherits = "release"   # base this on the default release profile
+codegen-units = 1      # generate a single blob of machine/Wasm instructions
+opt-level = "z"        # optimize for code size
+lto = true             # link time optimizations
+debug = false          # no debug symbols/checks
+panic = "abort"        # usually unwind, but that's extra overhead
+overflow-checks = true # enable safety checks for arithmetic operations
+
+[alias]
+wasm = "rustc --target wasm32-unknown-unknown"
+wasm-debug = "wasm -- --emit link=wasm/debug.wasm"
+wasm-release = "wasm --profile wasm-release -- --emit link=wasm/release.wasm"
